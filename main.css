@@ -39,29 +39,37 @@
     grid-gap: 10px;
     height: max-content;
     padding: 10px;
+    cursor: move;
 }
-  
+
+
 .list-title {
     font-weight: bold;
 }
   
-.card {
+#card {
     background-color: white;
     border-radius: 3px;
     box-shadow: 0 1px 0 rgba(9,30,66,.25);
     padding: 10px;
+    cursor: move;
 }
-  
+
 .add-card {
     padding-top: 10px;
     padding-bottom: 5px;
 }
+
 .add-boardlist {
     background-color: rgb(235, 236, 240);
     height: 20px;
-    opacity: 50%;
+    opacity: 80%;
     padding-top: 10px;
     padding-bottom: 10px;
     grid-gap: 10px;
     border-radius: 3px;
+}
+
+[draggable] {
+    user-select: none;
 }
