@@ -47,7 +47,7 @@
     font-weight: bold;
 }
   
-#card {
+.card {
     background-color: white;
     border-radius: 3px;
     box-shadow: 0 1px 0 rgba(9,30,66,.25);
@@ -60,7 +60,7 @@
     padding-bottom: 5px;
 }
 
-.add-boardlist {
+#add-boardlist {
     background-color: rgb(235, 236, 240);
     height: 20px;
     opacity: 80%;
@@ -68,8 +68,4 @@
     padding-bottom: 10px;
     grid-gap: 10px;
     border-radius: 3px;
-}
-
-[draggable] {
-    user-select: none;
 }
