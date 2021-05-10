@@ -79,6 +79,10 @@ body{
     border-radius: 3px;
 }
 
+#add {
+    background-color: lime;
+}
+
 [draggable] {
     user-select: none;
 }
