@@ -1,12 +1,15 @@
 let id = 0;
 
-document.querySelector("add-boardlist").addEventListener('click', function(){
+document.querySelector("#add-boardlist").addEventListener('click', function(){
   id++;
-  let boardlist = document.createElement("div")
+
+  let boardlist = document.createElement("div");
   boardlist.className = "board-list " + id;
-  let listtitle = document.createElement("div")
+
+  let listtitle = document.createElement("div");
   listtitle.className = "list-title";
   listtitle.innerText = "List title";
+
   let addcard = document.createElement("div");
   addcard.className = "add-card";
   addcard.innerText = "+ Add another card";
@@ -14,6 +17,6 @@ document.querySelector("add-boardlist").addEventListener('click', function(){
   boardlist.appendChild(listtitle);
   boardlist.appendChild(addcard);
 
-  document.querySelector(".board-lists").appendChild(boardlist);
-  
+
+  document.querySelector(".board-lists").insertBefore(boardlist, document.querySelector("#add-boardlist"))
 })
