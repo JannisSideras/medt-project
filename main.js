@@ -14,9 +14,9 @@ function createBoardLists() {
   let input = document.createElement("input");
   input.id = "input";
   input.onkeydown = () => {
-    if (event.keyCode == 13) {
+    if (event.keyCode === 13) {
       addBoardLists(input.value);
-      remover();
+      deleteBoardList();
     }
   }
 
@@ -25,14 +25,14 @@ function createBoardLists() {
   add.innerText = "add";
   add.onclick = function () {
     addBoardLists(input.value);
-    remover();
+    deleteBoardList();
   }
 
   let cancel = document.createElement("button");
   cancel.id = "cancel";
   cancel.innerText = "X";
   cancel.onclick = function () {
-    remover();
+    deleteBoardList();
   }; 
 
   addboardlist.appendChild(input);
@@ -42,32 +42,35 @@ function createBoardLists() {
 document.querySelector(".board-lists").appendChild(addboardlist);
 
 let id = 0;
-function addBoardLists (listName) {
+function addBoardLists (value) {
+  if(value === ""){ return; }
   id++;
   
   let boardlist = document.createElement("div");
   boardlist.className = `board-list ${id}`;
-
+  
   let listtitle = document.createElement("div");
-  listtitle.className = "list-title";
-  listtitle.innerText = listName;
-  
-  let editList = document.createElement("input");
-  editList.setAttribute("type", "text");
-  editList.setAttribute("value", ""); 
-  editList.onkeydown = () => {
-    if (event.keyCode == 13) {
-      listtitle.innerText = editList.value;
+  function makeTitle(title){
+    let listName = document.createTextNode(title);
+    let editList = document.createElement("input")
+    editList.id = "inputField"
+    editList.setAttribute("type", "text")
+    editList.setAttribute("value", "")
+    listtitle.className = "list-title"
+    listtitle.appendChild(listName)
+    listtitle.onclick = editListName
+    function editListName() {
+      listtitle.removeChild(listName)
+      editList.onkeydown = () => {
+        if (event.keyCode == 13) {
+          makeTitle(editList.value)
+          listtitle.removeChild(editList)
+        }
+      }
+      listtitle.appendChild(editList);
     }
-  }
-  
-  editList.style.display = "none";
-  listtitle.appendChild(editList);
-  
-  listtitle.onclick = function(){
-    editList.style.display = "block";
-  };
-  
+  }  
+
   let addcard = document.createElement("div");
   addcard.className = `add-card`;
   addcard.innerText = "+ Add another card";
@@ -82,7 +85,7 @@ function addBoardLists (listName) {
   boardlist.appendChild(listtitle);
   boardlist.appendChild(addcard);
   document.querySelector(".board-lists").insertBefore(boardlist, document.querySelector("#add-boardlist"))
-
+  makeTitle(value)
 }
 
 function setText(){
@@ -90,7 +93,7 @@ function setText(){
   addboardlist.onclick = createBoardLists;
 }
 
-function remover () {
+function deleteBoardList () {
   document.querySelector("#add-boardlist").removeChild(document.querySelector("#input"));
   document.querySelector("#add-boardlist").removeChild(document.querySelector("#add"));
   document.querySelector("#add-boardlist").removeChild(document.querySelector("#cancel"));
