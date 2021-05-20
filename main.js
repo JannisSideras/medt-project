@@ -10,35 +10,34 @@ addboardlist.onclick = createBoardLists;
 function createBoardLists() {
   if (document.querySelector("#text").innerHTML === "+Add a list...") {
     addboardlist.removeChild(text)
-  }else {
-    let input = document.createElement("input");
-    input.id = "input";
-    input.onkeydown = () => {
-      if (event.keyCode == 13) {
-        addBoardLists(input.value);
-        remover();
-      }
-    }
-
-    let add = document.createElement("button");
-    add.id = "add";
-    add.innerText = "add";
-    add.onclick = function () {
+  }
+  let input = document.createElement("input");
+  input.id = "input";
+  input.onkeydown = () => {
+    if (event.keyCode == 13) {
       addBoardLists(input.value);
       remover();
     }
-
-    let cancel = document.createElement("button");
-    cancel.id = "cancel";
-    cancel.innerText = "X";
-    cancel.onclick = function () {
-      remover();
-    }; 
-
-    addboardlist.appendChild(input);
-    addboardlist.appendChild(add);
-    addboardlist.appendChild(cancel);
   }
+
+  let add = document.createElement("button");
+  add.id = "add";
+  add.innerText = "add";
+  add.onclick = function () {
+    addBoardLists(input.value);
+    remover();
+  }
+
+  let cancel = document.createElement("button");
+  cancel.id = "cancel";
+  cancel.innerText = "X";
+  cancel.onclick = function () {
+    remover();
+  }; 
+
+  addboardlist.appendChild(input);
+  addboardlist.appendChild(add);
+  addboardlist.appendChild(cancel);
 }
 document.querySelector(".board-lists").appendChild(addboardlist);
 
@@ -85,9 +84,15 @@ function addBoardLists (listName) {
   document.querySelector(".board-lists").insertBefore(boardlist, document.querySelector("#add-boardlist"))
 
 }
+
+function setText(){
+  addboardlist.appendChild(text)
+  addboardlist.onclick = createBoardLists;
+}
+
 function remover () {
   document.querySelector("#add-boardlist").removeChild(document.querySelector("#input"));
   document.querySelector("#add-boardlist").removeChild(document.querySelector("#add"));
   document.querySelector("#add-boardlist").removeChild(document.querySelector("#cancel"));
-  addboardlist.onclick = createBoardLists;
+  addboardlist.onclick = setText;
 }
