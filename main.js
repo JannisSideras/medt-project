@@ -1,3 +1,8 @@
+const container = document.querySelector(".container")
+container.onclick = function(){
+  
+}
+
 let addboardlist = document.createElement("div");
 addboardlist.id = "add-boardlist"
 
@@ -67,6 +72,15 @@ function addBoardLists (value) {
           listtitle.removeChild(editList)
         }
       }
+      editList.addEventListener('blur', () => {
+        if(editList.value === null || editList.value === ""){
+          document.querySelector("#inputField").remove()
+          listtitle.appendChild(listName)
+        }else {
+          makeTitle(editList.value)
+          listtitle.removeChild(editList)
+        }
+      })
       listtitle.appendChild(editList);
     }
   }  
@@ -74,13 +88,34 @@ function addBoardLists (value) {
   let addcard = document.createElement("div");
   addcard.className = `add-card`;
   addcard.innerText = "+ Add another card";
-  addcard.addEventListener('click', function(){
-    let card = document.createElement("div");
+  addcard.onclick = addCardElement;
+  function addCardElement(){
+    addcard.onclick = null
+    let textarea = document.createElement("textarea");
+    textarea.className = "textArea"
+
+    let card = document.createElement("div")
     card.className = "card";
-    card.innerText = "edit";
-    boardlist.insertBefore(card, addcard)
-  });
-  
+    boardlist.insertBefore(textarea, addcard)
+
+    textarea.addEventListener('focus', () => {
+      console.log("focus");
+      document.querySelector(".add-card").onclick = null;
+    })
+    textarea.addEventListener('blur', () => {
+      console.log("blur");
+      if (textarea.value === null || textarea.value === "") {
+        document.querySelector(".textArea").remove()
+      }
+      else {
+        let cardString = document.createTextNode(textarea.value)
+        document.querySelector(".textArea").remove()
+        card.appendChild(cardString);
+        boardlist.insertBefore(card, addcard);
+      }
+      document.querySelector(".add-card").onclick = addCardElement;
+      })
+  }
   boardlist.draggable = true;
   boardlist.appendChild(listtitle);
   boardlist.appendChild(addcard);
@@ -99,3 +134,5 @@ function deleteBoardList () {
   document.querySelector("#add-boardlist").removeChild(document.querySelector("#cancel"));
   addboardlist.onclick = setText;
 }
+
+

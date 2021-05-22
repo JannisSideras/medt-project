@@ -85,3 +85,7 @@ body{
 [draggable] {
     user-select: none;
 }
+
+.textArea {
+    max-width: 245px;
+}
