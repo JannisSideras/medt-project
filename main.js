@@ -1,7 +1,3 @@
-const container = document.querySelector(".container")
-container.onclick = function(){
-  
-}
 
 let addboardlist = document.createElement("div");
 addboardlist.id = "add-boardlist"
@@ -48,12 +44,13 @@ document.querySelector(".board-lists").appendChild(addboardlist);
 
 let id = 0;
 function addBoardLists (value) {
-  if(value === ""){ return; }
+  if (value === "") { return; }
   id++;
   
   let boardlist = document.createElement("div");
   boardlist.className = `board-list ${id}`;
   
+  // TITLE
   let listtitle = document.createElement("div");
   function makeTitle(title){
     let listName = document.createTextNode(title);
@@ -68,8 +65,8 @@ function addBoardLists (value) {
       listtitle.removeChild(listName)
       editList.onkeydown = () => {
         if (event.keyCode == 13) {
-          makeTitle(editList.value)
           listtitle.removeChild(editList)
+          makeTitle(editList.value)
         }
       }
       editList.addEventListener('blur', () => {
@@ -85,40 +82,64 @@ function addBoardLists (value) {
     }
   }  
 
-  let addcard = document.createElement("div");
-  addcard.className = `add-card`;
-  addcard.innerText = "+ Add another card";
-  addcard.onclick = addCardElement;
-  function addCardElement(){
-    addcard.onclick = null
-    let textarea = document.createElement("textarea");
-    textarea.className = "textArea"
+  // ADDS ELEMENTS IN BOARD LISTS
+  let addElementDiv = document.createElement('div')
+  addElementDiv.id = "addElement"
 
+  let textarea = document.createElement("textarea");
+  textarea.className = "textArea"
+
+  let add = document.createElement('button')
+  add.id = "add";
+  add.innerText = "add";
+  add.onclick = function () {
+    if(textarea.value === "" || textarea.value === null) {
+      document.querySelector("#addElement").remove()
+      textarea.value = null
+      boardlist.appendChild(addcard)
+    }
     let card = document.createElement("div")
     card.className = "card";
-    boardlist.insertBefore(textarea, addcard)
 
-    textarea.addEventListener('focus', () => {
-      console.log("focus");
-      document.querySelector(".add-card").onclick = null;
-    })
-    textarea.addEventListener('blur', () => {
-      console.log("blur");
-      if (textarea.value === null || textarea.value === "") {
-        document.querySelector(".textArea").remove()
-      }
-      else {
-        let cardString = document.createTextNode(textarea.value)
-        document.querySelector(".textArea").remove()
-        card.appendChild(cardString);
-        boardlist.insertBefore(card, addcard);
-      }
-      document.querySelector(".add-card").onclick = addCardElement;
-      })
+    document.querySelector("#addElement").remove()
+    
+    let text = document.createTextNode(textarea.value)
+    card.appendChild(text)
+
+    boardlist.appendChild(card)
+    boardlist.appendChild(addcard)
+    textarea.value = null
   }
-  boardlist.draggable = true;
+
+  
+  let cancel = document.createElement("button");
+  cancel.id = "cancel";
+  cancel.innerText = "X";
+  cancel.onclick = function () {
+    document.querySelector("#addElement").remove()
+    textarea.value = null
+    boardlist.appendChild(addcard)
+  }
+
+
+  let addcard = document.createElement("div");
+  addcard.id = `add-card`;
+  addcard.innerText = "+ Add another card";
+  addcard.onclick = function () {
+    
+    boardlist.removeChild(addcard)
+
+    addElementDiv.appendChild(textarea)
+    addElementDiv.appendChild(add)
+    addElementDiv.appendChild(cancel)
+
+    boardlist.appendChild(addElementDiv)
+  }
+
+
   boardlist.appendChild(listtitle);
   boardlist.appendChild(addcard);
+  boardlist.appendChild(addElementDiv)
   document.querySelector(".board-lists").insertBefore(boardlist, document.querySelector("#add-boardlist"))
   makeTitle(value)
 }
@@ -134,5 +155,3 @@ function deleteBoardList () {
   document.querySelector("#add-boardlist").removeChild(document.querySelector("#cancel"));
   addboardlist.onclick = setText;
 }
-
-
