@@ -36,19 +36,21 @@ function createBoardLists() {
     deleteBoardList();
   }; 
 
+
+
   addboardlist.appendChild(input);
   addboardlist.appendChild(add);
   addboardlist.appendChild(cancel);
 }
 document.querySelector(".board-lists").appendChild(addboardlist);
 
-let id = 0;
 function addBoardLists (value) {
   if (value === "") { return; }
-  id++;
+  
+  
   
   let boardlist = document.createElement("div");
-  boardlist.className = `board-list ${id}`;
+  boardlist.className = `board-list`;
   
   // TITLE
   let listtitle = document.createElement("div");
@@ -79,6 +81,7 @@ function addBoardLists (value) {
         }
       })
       listtitle.appendChild(editList);
+      id++;
     }
   }  
 
@@ -136,6 +139,7 @@ function addBoardLists (value) {
     boardlist.appendChild(addElementDiv)
   }
 
+  boardlist.draggable = true;
 
   boardlist.appendChild(listtitle);
   boardlist.appendChild(addcard);
@@ -155,3 +159,66 @@ function deleteBoardList () {
   document.querySelector("#add-boardlist").removeChild(document.querySelector("#cancel"));
   addboardlist.onclick = setText;
 }
+
+
+
+document.addEventListener('change', (event) => {
+
+  let dragSrcEl = null;
+
+  function handleDragStart(e) {
+    this.style.opacity = '1';
+
+    dragSrcEl = this;
+
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', this.innerHTML);
+  }
+
+  function handleDragOver(e) {
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+
+    e.dataTransfer.dropEffect = 'move';
+
+    return false;
+  }
+
+  function handleDragEnter(e) {
+    this.classList.add('over');
+  }
+
+  function handleDragLeave(e) {
+    this.classList.remove('over');
+  }
+
+  function handleDrop(e) {
+    if (e.stopPropagation) {
+      e.stopPropagation(); // stops the browser from redirecting.
+    }
+
+    if (dragSrcEl != this) {
+      dragSrcEl.innerHTML = this.innerHTML;
+      this.innerHTML = e.dataTransfer.getData('text/html');
+    }
+
+    return false;
+  }
+
+  function handleDragEnd(e) {
+    this.style.opacity = '1';
+  }
+
+
+  let boardlist = document.querySelectorAll(`.board-list`);
+  console.log(boardlist);
+  boardlist.forEach(function(item) {
+      item.addEventListener('dragstart', handleDragStart, false);
+      item.addEventListener('dragenter', handleDragEnter, false);
+      item.addEventListener('dragover', handleDragOver, false);
+      item.addEventListener('dragleave', handleDragLeave, false);
+      item.addEventListener('drop', handleDrop, false);
+      item.addEventListener('dragend', handleDragEnd, false);
+  });
+});

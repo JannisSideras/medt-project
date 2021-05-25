@@ -82,9 +82,6 @@ body{
     background-color: lime;
 }
 
-[draggable] {
-    user-select: none;
-}
 
 .textArea {
     max-width: 245px;
