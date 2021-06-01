@@ -1,4 +1,3 @@
-
 let addboardlist = document.createElement("div");
 addboardlist.id = "add-boardlist"
 
@@ -43,14 +42,14 @@ function createBoardLists() {
   addboardlist.appendChild(cancel);
 }
 document.querySelector(".board-lists").appendChild(addboardlist);
-
+let id = 0;
 function addBoardLists (value) {
-  if (value === "") { return; }
-  
-  
-  
+  id++;
+  if (value === "") { return }
+
   let boardlist = document.createElement("div");
   boardlist.className = `board-list`;
+  boardlist.id = "ID"+id
   
   // TITLE
   let listtitle = document.createElement("div");
@@ -81,7 +80,6 @@ function addBoardLists (value) {
         }
       })
       listtitle.appendChild(editList);
-      id++;
     }
   }  
 
@@ -141,6 +139,13 @@ function addBoardLists (value) {
 
   boardlist.draggable = true;
 
+  boardlist.addEventListener('dragstart', handleDragStart, false);
+  boardlist.addEventListener('dragenter', handleDragEnter, false);
+  boardlist.addEventListener('dragover', handleDragOver, false);
+  boardlist.addEventListener('dragleave', handleDragLeave, false);
+  boardlist.addEventListener('drop', handleDrop, false);
+  boardlist.addEventListener('dragend', handleDragEnd, false);
+
   boardlist.appendChild(listtitle);
   boardlist.appendChild(addcard);
   boardlist.appendChild(addElementDiv)
@@ -161,64 +166,50 @@ function deleteBoardList () {
 }
 
 
+//DRAG AND DROP FUNCTIONS
+let boardList;
+let otherBoardList;
+function handleDragStart(event) {
+  boardList = this.id;
+  document.getElementById(boardList).style.opacity = "0.3"
+}
 
-document.addEventListener('change', (event) => {
+function handleDragOver(event) {
+  event.dataTransfer.dropEffect = 'move';
+  otherBoardList = this.id
 
-  let dragSrcEl = null;
-
-  function handleDragStart(e) {
-    this.style.opacity = '1';
-
-    dragSrcEl = this;
-
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', this.innerHTML);
+  if(getChildNodeIndex(document.getElementById(boardList)) < getChildNodeIndex(document.getElementById(otherBoardList))) {
+    document.querySelector(".board-lists").insertBefore(document.getElementById(otherBoardList), document.getElementById(boardList))
+  }else if(getChildNodeIndex(document.getElementById(boardList)) > getChildNodeIndex(document.getElementById(otherBoardList))){
+    document.querySelector(".board-lists").insertBefore(document.getElementById(boardList), document.getElementById(otherBoardList))
   }
-
-  function handleDragOver(e) {
-    if (e.preventDefault) {
-      e.preventDefault();
-    }
-
-    e.dataTransfer.dropEffect = 'move';
-
-    return false;
+  if (event.preventDefault) {
+    event.preventDefault(); 
   }
+}
 
-  function handleDragEnter(e) {
-    this.classList.add('over');
-  }
+function handleDragEnter(event) {
 
-  function handleDragLeave(e) {
-    this.classList.remove('over');
-  }
+}  
 
-  function handleDrop(e) {
-    if (e.stopPropagation) {
-      e.stopPropagation(); // stops the browser from redirecting.
-    }
+function handleDragLeave(event) {
+}
 
-    if (dragSrcEl != this) {
-      dragSrcEl.innerHTML = this.innerHTML;
-      this.innerHTML = e.dataTransfer.getData('text/html');
-    }
+function handleDrop(event) {
+  event.stopPropagation();
+  event.preventDefault();
+}
 
-    return false;
-  }
+function handleDragEnd(event) {
+  //placeHolder.remove()
+  document.getElementById(boardList).style.opacity = "1"
+}
 
-  function handleDragEnd(e) {
-    this.style.opacity = '1';
-  }
-
-
-  let boardlist = document.querySelectorAll(`.board-list`);
-  console.log(boardlist);
-  boardlist.forEach(function(item) {
-      item.addEventListener('dragstart', handleDragStart, false);
-      item.addEventListener('dragenter', handleDragEnter, false);
-      item.addEventListener('dragover', handleDragOver, false);
-      item.addEventListener('dragleave', handleDragLeave, false);
-      item.addEventListener('drop', handleDrop, false);
-      item.addEventListener('dragend', handleDragEnd, false);
-  });
-});
+function getChildNodeIndex(elem) {
+     let position = 1;
+     while ((elem = elem.previousSibling) != null) {
+         if(elem.nodeType != Node.TEXT_NODE)
+          position++;
+     }
+     return position;
+}

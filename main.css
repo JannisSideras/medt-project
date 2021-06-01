@@ -4,7 +4,7 @@ body{
 }
 
 .container {
-    height: 98vh;
+    height: 99vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 0.5fr 4fr;
@@ -52,6 +52,9 @@ body{
 }
 
 .list-title {
+    text-align: left;
+    padding-left: 5%;
+    color: rgb(80, 80, 80);
     font-weight: bold;
 }
   
@@ -85,4 +88,11 @@ body{
 
 .textArea {
     max-width: 245px;
+}
+
+[draggable] {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
