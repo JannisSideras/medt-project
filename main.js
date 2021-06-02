@@ -210,7 +210,7 @@ function handleDragOver(event) {
 
 function handleDragEnter(event) {
   if(drag){
-    document.getElementById(boardList).style.opacity = "0.3"
+    this.style.opacity = "0.3"
   }
 }  
 
@@ -235,15 +235,10 @@ function getChildNodeIndex(elem) {
      return position;
 }
 
-function handleDragOverCard(event) {
 
-  if (event.preventDefault) {
-    event.preventDefault(); 
-  }
-}
-
+let originalCard
 function handleDragEnterCard(event) {
-
+  
 }  
 
 function handleDragLeaveCard(event) {
@@ -259,21 +254,22 @@ function handleDragEndCard(event) {
   drag = true
 }
 function handleDragStartCard(event) {
-
+  originalCard = this
   
   drag = false
 }
 
+function handleDragOverCard(event) {
+  let otherCard = this
+  if (event.preventDefault) {
+    event.preventDefault(); 
+  }
 
 
 
-
-
-
-
-
-
-
-
-
-
+  if (getChildNodeIndex(originalCard) > getChildNodeIndex(otherCard)) {
+    this.parentNode.insertBefore(originalCard, otherCard)
+  } else {
+    this.parentNode.insertBefore(otherCard, originalCard)
+  }
+}
