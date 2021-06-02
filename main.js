@@ -6,13 +6,17 @@ text.id = "text";
 text.innerText = "+Add a list..."
 addboardlist.appendChild(text)
 
+let br = document.createElement("br")
+br.id = "br"
+
 addboardlist.onclick = createBoardLists;
+
 function createBoardLists() {
-  if (document.querySelector("#text").innerHTML === "+Add a list...") {
+  if (document.querySelector("#text").innerText === "+Add a list...") {
     addboardlist.removeChild(text)
   }
   let input = document.createElement("input");
-  input.id = "input";
+  input.className = "input";
   input.onkeydown = () => {
     if (event.keyCode === 13) {
       addBoardLists(input.value);
@@ -21,28 +25,31 @@ function createBoardLists() {
   }
 
   let add = document.createElement("button");
-  add.id = "add";
-  add.innerText = "add";
+  add.className = "add";
+  add.innerText = "Add list";
   add.onclick = function () {
     addBoardLists(input.value);
     deleteBoardList();
   }
 
   let cancel = document.createElement("button");
-  cancel.id = "cancel";
+  cancel.className = "cancel";
   cancel.innerText = "X";
   cancel.onclick = function () {
     deleteBoardList();
   }; 
 
-
+  addboardlist.style.height = "70px"
+  addboardlist.style.opacity = "1"
 
   addboardlist.appendChild(input);
+  addboardlist.appendChild(br);
   addboardlist.appendChild(add);
   addboardlist.appendChild(cancel);
 }
 document.querySelector(".board-lists").appendChild(addboardlist);
 let id = 0;
+
 function addBoardLists (value) {
   id++;
   if (value === "") { return }
@@ -91,7 +98,7 @@ function addBoardLists (value) {
   textarea.className = "textArea"
 
   let add = document.createElement('button')
-  add.id = "add";
+  add.className = "add";
   add.innerText = "add";
   add.onclick = function () {
     if(textarea.value === "" || textarea.value === null) {
@@ -101,7 +108,15 @@ function addBoardLists (value) {
     }
     let card = document.createElement("div")
     card.className = "card";
+    card.draggable = true;
 
+    card.addEventListener('dragstart', handleDragStartCard);
+    card.addEventListener('dragenter', handleDragEnterCard);
+    card.addEventListener('dragover', handleDragOverCard);
+    card.addEventListener('dragleave', handleDragLeaveCard);
+    card.addEventListener('drop', handleDropCard);
+    card.addEventListener('dragend', handleDragEndCard);
+    
     document.querySelector("#addElement").remove()
     
     let text = document.createTextNode(textarea.value)
@@ -114,7 +129,7 @@ function addBoardLists (value) {
 
   
   let cancel = document.createElement("button");
-  cancel.id = "cancel";
+  cancel.className = "cancel";
   cancel.innerText = "X";
   cancel.onclick = function () {
     document.querySelector("#addElement").remove()
@@ -127,24 +142,23 @@ function addBoardLists (value) {
   addcard.id = `add-card`;
   addcard.innerText = "+ Add another card";
   addcard.onclick = function () {
-    
     boardlist.removeChild(addcard)
-
     addElementDiv.appendChild(textarea)
+    addElementDiv.appendChild(br)
     addElementDiv.appendChild(add)
     addElementDiv.appendChild(cancel)
-
     boardlist.appendChild(addElementDiv)
   }
 
   boardlist.draggable = true;
 
-  boardlist.addEventListener('dragstart', handleDragStart, false);
-  boardlist.addEventListener('dragenter', handleDragEnter, false);
-  boardlist.addEventListener('dragover', handleDragOver, false);
-  boardlist.addEventListener('dragleave', handleDragLeave, false);
-  boardlist.addEventListener('drop', handleDrop, false);
-  boardlist.addEventListener('dragend', handleDragEnd, false);
+  boardlist.addEventListener('dragstart', handleDragStart);
+  boardlist.addEventListener('dragenter', handleDragEnter);
+  boardlist.addEventListener('dragover', handleDragOver);
+  boardlist.addEventListener('dragleave', handleDragLeave);
+  boardlist.addEventListener('drop', handleDrop);
+  boardlist.addEventListener('dragend', handleDragEnd);
+
 
   boardlist.appendChild(listtitle);
   boardlist.appendChild(addcard);
@@ -159,37 +173,45 @@ function setText(){
 }
 
 function deleteBoardList () {
-  document.querySelector("#add-boardlist").removeChild(document.querySelector("#input"));
-  document.querySelector("#add-boardlist").removeChild(document.querySelector("#add"));
-  document.querySelector("#add-boardlist").removeChild(document.querySelector("#cancel"));
+  document.querySelector("#add-boardlist").removeChild(document.querySelector("#br"));
+  document.querySelector("#add-boardlist").removeChild(document.querySelector(".input"));
+  document.querySelector("#add-boardlist").removeChild(document.querySelector(".add"));
+  document.querySelector("#add-boardlist").removeChild(document.querySelector(".cancel"));
+  addboardlist.style.height = "20px"
   addboardlist.onclick = setText;
 }
+let drag = true;
 
 
 //DRAG AND DROP FUNCTIONS
 let boardList;
 let otherBoardList;
+let card;
+let otherCard;
 function handleDragStart(event) {
   boardList = this.id;
-  document.getElementById(boardList).style.opacity = "0.3"
 }
 
 function handleDragOver(event) {
-  event.dataTransfer.dropEffect = 'move';
-  otherBoardList = this.id
+  if(drag){
+    event.dataTransfer.dropEffect = 'move';
+    otherBoardList = this.id
 
-  if(getChildNodeIndex(document.getElementById(boardList)) < getChildNodeIndex(document.getElementById(otherBoardList))) {
-    document.querySelector(".board-lists").insertBefore(document.getElementById(otherBoardList), document.getElementById(boardList))
-  }else if(getChildNodeIndex(document.getElementById(boardList)) > getChildNodeIndex(document.getElementById(otherBoardList))){
-    document.querySelector(".board-lists").insertBefore(document.getElementById(boardList), document.getElementById(otherBoardList))
-  }
-  if (event.preventDefault) {
-    event.preventDefault(); 
+    if(getChildNodeIndex(document.getElementById(boardList)) < getChildNodeIndex(document.getElementById(otherBoardList))) {
+      document.querySelector(".board-lists").insertBefore(document.getElementById(otherBoardList), document.getElementById(boardList))
+    }else if(getChildNodeIndex(document.getElementById(boardList)) > getChildNodeIndex(document.getElementById(otherBoardList))){
+      document.querySelector(".board-lists").insertBefore(document.getElementById(boardList), document.getElementById(otherBoardList))
+    }
+    if (event.preventDefault) {
+      event.preventDefault(); 
+    }
   }
 }
 
 function handleDragEnter(event) {
-
+  if(drag){
+    document.getElementById(boardList).style.opacity = "0.3"
+  }
 }  
 
 function handleDragLeave(event) {
@@ -201,7 +223,6 @@ function handleDrop(event) {
 }
 
 function handleDragEnd(event) {
-  //placeHolder.remove()
   document.getElementById(boardList).style.opacity = "1"
 }
 
@@ -213,3 +234,46 @@ function getChildNodeIndex(elem) {
      }
      return position;
 }
+
+function handleDragOverCard(event) {
+
+  if (event.preventDefault) {
+    event.preventDefault(); 
+  }
+}
+
+function handleDragEnterCard(event) {
+
+}  
+
+function handleDragLeaveCard(event) {
+}
+
+function handleDropCard(event) {
+
+}
+
+function handleDragEndCard(event) {
+
+
+  drag = true
+}
+function handleDragStartCard(event) {
+
+  
+  drag = false
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
