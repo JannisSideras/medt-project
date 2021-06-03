@@ -1,3 +1,5 @@
+
+
 let addboardlist = document.createElement("div");
 addboardlist.id = "add-boardlist"
 
@@ -48,8 +50,9 @@ function createBoardLists() {
   addboardlist.appendChild(cancel);
 }
 document.querySelector(".board-lists").appendChild(addboardlist);
-let id = 0;
 
+let id = 0;
+let drag = true
 function addBoardLists (value) {
   id++;
   if (value === "") { return }
@@ -110,12 +113,6 @@ function addBoardLists (value) {
     card.className = "card";
     card.draggable = true;
 
-    card.addEventListener('dragstart', handleDragStartCard);
-    card.addEventListener('dragenter', handleDragEnterCard);
-    card.addEventListener('dragover', handleDragOverCard);
-    card.addEventListener('dragleave', handleDragLeaveCard);
-    card.addEventListener('drop', handleDropCard);
-    card.addEventListener('dragend', handleDragEndCard);
     
     document.querySelector("#addElement").remove()
     
@@ -152,13 +149,25 @@ function addBoardLists (value) {
 
   boardlist.draggable = true;
 
-  boardlist.addEventListener('dragstart', handleDragStart);
-  boardlist.addEventListener('dragenter', handleDragEnter);
-  boardlist.addEventListener('dragover', handleDragOver);
-  boardlist.addEventListener('dragleave', handleDragLeave);
-  boardlist.addEventListener('drop', handleDrop);
-  boardlist.addEventListener('dragend', handleDragEnd);
-
+  boardlist.addEventListener('dragstart', handleDragStart, false);
+  boardlist.addEventListener('dragover', handleDragOver, false);
+  boardlist.addEventListener('drop', handleDrop, false); 
+  
+  new Sortable(boardlist, {
+    group: 'sharedList', // set both lists to same group
+    animation: 150, 
+    draggable: ".card",
+    onStart: function () {
+      drag = false
+    },
+    onEnd: function () {
+      drag = true
+    },
+    onAdd: function () {
+      boardlist.removeChild(addcard)
+      boardlist.appendChild(addcard)
+    },
+  });
 
   boardlist.appendChild(listtitle);
   boardlist.appendChild(addcard);
@@ -180,7 +189,8 @@ function deleteBoardList () {
   addboardlist.style.height = "20px"
   addboardlist.onclick = setText;
 }
-let drag = true;
+
+
 
 
 //DRAG AND DROP FUNCTIONS
@@ -193,38 +203,30 @@ function handleDragStart(event) {
 }
 
 function handleDragOver(event) {
-  if(drag){
     event.dataTransfer.dropEffect = 'move';
     otherBoardList = this.id
 
-    if(getChildNodeIndex(document.getElementById(boardList)) < getChildNodeIndex(document.getElementById(otherBoardList))) {
-      document.querySelector(".board-lists").insertBefore(document.getElementById(otherBoardList), document.getElementById(boardList))
-    }else if(getChildNodeIndex(document.getElementById(boardList)) > getChildNodeIndex(document.getElementById(otherBoardList))){
-      document.querySelector(".board-lists").insertBefore(document.getElementById(boardList), document.getElementById(otherBoardList))
+    if (drag) {
+      if(getChildNodeIndex(document.getElementById(boardList)) < getChildNodeIndex(document.getElementById(otherBoardList))) {
+        document.querySelector(".board-lists").insertBefore(document.getElementById(otherBoardList), document.getElementById(boardList))
+      }else if(getChildNodeIndex(document.getElementById(boardList)) > getChildNodeIndex(document.getElementById(otherBoardList))){
+        document.querySelector(".board-lists").insertBefore(document.getElementById(boardList), document.getElementById(otherBoardList))
+      }
+      if (event.preventDefault) {
+        event.preventDefault(); 
+      }
     }
-    if (event.preventDefault) {
-      event.preventDefault(); 
-    }
-  }
+     
+
+    
 }
 
-function handleDragEnter(event) {
-  if(drag){
-    this.style.opacity = "0.3"
-  }
-}  
-
-function handleDragLeave(event) {
-}
 
 function handleDrop(event) {
   event.stopPropagation();
   event.preventDefault();
 }
 
-function handleDragEnd(event) {
-  document.getElementById(boardList).style.opacity = "1"
-}
 
 function getChildNodeIndex(elem) {
      let position = 1;
@@ -233,43 +235,4 @@ function getChildNodeIndex(elem) {
           position++;
      }
      return position;
-}
-
-
-let originalCard
-function handleDragEnterCard(event) {
-  
-}  
-
-function handleDragLeaveCard(event) {
-}
-
-function handleDropCard(event) {
-
-}
-
-function handleDragEndCard(event) {
-
-
-  drag = true
-}
-function handleDragStartCard(event) {
-  originalCard = this
-  
-  drag = false
-}
-
-function handleDragOverCard(event) {
-  let otherCard = this
-  if (event.preventDefault) {
-    event.preventDefault(); 
-  }
-
-
-
-  if (getChildNodeIndex(originalCard) > getChildNodeIndex(otherCard)) {
-    this.parentNode.insertBefore(originalCard, otherCard)
-  } else {
-    this.parentNode.insertBefore(otherCard, originalCard)
-  }
 }

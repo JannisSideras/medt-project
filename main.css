@@ -51,6 +51,18 @@ body{
     cursor: move;
 }
 
+
+.active {
+    background-color: rgb(235, 236, 240);
+    border-radius: 3px;
+    display: grid;
+    grid-auto-rows: max-content;
+    grid-gap: 10px;
+    height: max-content;
+    padding: 10px;
+    cursor: move;
+}
+
 .list-title {
     text-align: left;
     padding-left: 5%;
@@ -133,10 +145,3 @@ body{
 
 
 
-
-[draggable] {
-    -moz-user-select: none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-}
