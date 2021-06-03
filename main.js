@@ -152,6 +152,7 @@ function addBoardLists (value) {
   boardlist.addEventListener('dragstart', handleDragStart, false);
   boardlist.addEventListener('dragover', handleDragOver, false);
   boardlist.addEventListener('drop', handleDrop, false); 
+  boardlist.addEventListener('dragend', handleDragEnd, false); 
   
   new Sortable(boardlist, {
     group: 'sharedList', // set both lists to same group
@@ -200,6 +201,12 @@ let card;
 let otherCard;
 function handleDragStart(event) {
   boardList = this.id;
+  if (!drag) {
+    this.className += " .hover"
+    setTimeout(() => {
+      this.className = "invisible"
+    }, 1);
+  }
 }
 
 function handleDragOver(event) {
@@ -227,6 +234,9 @@ function handleDrop(event) {
   event.preventDefault();
 }
 
+function handleDragEnd(event) {
+  document.querySelector(".invisible").setAttribute("class", "board-list")
+}
 
 function getChildNodeIndex(elem) {
      let position = 1;

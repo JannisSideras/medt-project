@@ -143,5 +143,10 @@ body{
     max-width: 245px;
 }
 
+.invisible {
+    opacity: 0.1;
+}
 
-
+.hover {
+    opacity: 1;
+}
