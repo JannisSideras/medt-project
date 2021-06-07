@@ -1,9 +1,14 @@
 body{
-    overflow-x:hidden;
-    overflow-y: hidden;
+    font-family: 'Signika Negative', sans-serif;
+    background-image: url("../img/background.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    height: 100%;
 }
 
 .container {
+    overflow: auto;
     height: 99vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -18,10 +23,6 @@ body{
     grid-column: 1/4; 
 }
 
-.header div {
-    background-color: rgba(9,30,66,.4);
-    border-radius: 6px;
-}
 
 .body {
     color: white;
@@ -54,17 +55,6 @@ body{
 }
 
 
-.active {
-    background-color: rgb(235, 236, 240);
-    border-radius: 3px;
-    display: grid;
-    grid-auto-rows: max-content;
-    grid-gap: 10px;
-    height: max-content;
-    padding: 10px;
-    cursor: move;
-}
-
 .list-title {
     text-align: left;
     padding-left: 5%;
@@ -94,7 +84,7 @@ body{
     padding: 10px;
     grid-gap: 10px;
     border-radius: 3px;
-    transition: height .5s, opacity .5s;
+    transition: height .1s, opacity .1s;
 }
 
 
@@ -152,9 +142,3 @@ body{
 .hover {
     opacity: 1;
 }
-
-
-
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! STARTUP PAGE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-
-

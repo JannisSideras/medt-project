@@ -159,12 +159,13 @@ function addBoardLists (value) {
     group: 'sharedList', // set both lists to same group
     animation: 150, 
     draggable: ".card",
-    easing: "cubic-bezier(1, 0, 0, 1)",
-    onStart: function () {
+    onStart: function (event) {
       drag = false
+      event.item.style.opacity = "0"
     },
-    onEnd: function () {
+    onEnd: function (event) {
       drag = true
+      event.item.style.opacity = "1"
     },
     onAdd: function () {
       boardlist.removeChild(addcard)
@@ -175,13 +176,9 @@ function addBoardLists (value) {
   new Sortable(boardLists, {
     animation: 150, 
     draggable: ".board-list",
-    easing: "cubic-bezier(1, 0, 0, 1)",
     onStart: function (event) {
       drag = false
       event.item.style.opacity = "0"
-    },
-    onMove: function (event) {
-      
     },
     onEnd: function (event) {
       event.item.style.opacity = "1"
@@ -192,6 +189,7 @@ function addBoardLists (value) {
       boardlist.appendChild(addcard)
     },
   });
+
   boardlist.ondragover = function () {
     boardlist.removeChild(addcard)
     boardlist.appendChild(addcard)
