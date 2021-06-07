@@ -8,7 +8,6 @@ body{
 }
 
 .container {
-    overflow: auto;
     height: 99vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -129,6 +128,10 @@ body{
     border: none;
 }
 
+#home {
+    text-decoration: none;
+    color: white;
+}
 
 .textArea {
     min-width: 245px;

@@ -47,13 +47,19 @@ let id = 0;
 function addBoard(title) {
     if (title === "") { return }
     id++;
+
+    let a = document.createElement("a")
+    a.href = "./index.html"
+
     let board = document.createElement("div")
     board.className = "board"
     board.id = "boardID"+id;
 
     board.innerHTML = title
 
-    document.getElementById("boards").appendChild(board)
+    a.appendChild(board)
+
+    document.getElementById("boards").appendChild(a)
 }
 
 function setText() {

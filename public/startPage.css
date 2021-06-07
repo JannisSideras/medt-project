@@ -99,11 +99,18 @@ body{
 }
 
 
-.boards {
+.board {
+    color: white;
     padding: 1.5%;
     border-radius: 5px;
     height: 1.5rem;
-    width: 2rem;
+    width: 10rem;
     font-size: 1.2rem;
-    margin-left: 5%;
+    margin-left: 1%;
+    margin-bottom: 2%;
+    background-image: url("../img/background.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    float: left;
 }
