@@ -52,7 +52,9 @@ function createBoardLists() {
 }
 boardLists.appendChild(addboardlist);
 
+let target = "";
 let id = 0;
+let cardID = 0;
 let drag = true
 function addBoardLists (value) {
   id++;
@@ -105,8 +107,7 @@ function addBoardLists (value) {
 
   let add = document.createElement('button')
   add.className = "add";
-  add.innerText = "add";
-  let cardID = 0; 
+  add.innerText = "add"; 
   add.onclick = function () {
     cardID++
     if(textarea.value === "" || textarea.value === null) {
@@ -119,7 +120,6 @@ function addBoardLists (value) {
     card.id = "cardID"+cardID
     card.draggable = true;
 
-    
     document.querySelector("#addElement").remove()
     
     let text = document.createTextNode(textarea.value)
@@ -130,7 +130,14 @@ function addBoardLists (value) {
     textarea.value = null
   }
 
-  
+  document.getElementById("dropzone").ondragover = function (event) {
+    if(target !== null){
+      document.getElementById(target).remove();
+      target = null
+    }
+  }
+
+
   let cancel = document.createElement("button");
   cancel.className = "cancel";
   cancel.innerText = "X";
@@ -139,7 +146,6 @@ function addBoardLists (value) {
     textarea.value = null
     boardlist.appendChild(addcard)
   }
-
 
   let addcard = document.createElement("div");
   addcard.id = `add-card`;
@@ -153,7 +159,6 @@ function addBoardLists (value) {
     boardlist.appendChild(addElementDiv)
   }
   boardlist.draggable = true;
- 
   
   new Sortable(boardlist, {
     group: 'sharedList', // set both lists to same group
@@ -190,6 +195,14 @@ function addBoardLists (value) {
     },
   });
 
+  boardlist.ondragstart = function (event) {
+    target = event.target.id
+    document.getElementById("dropzone").style.display = "block"
+  }
+  boardlist.ondragend = function () {
+    document.getElementById("dropzone").style.display = "none"
+  }
+
   boardlist.ondragover = function () {
     boardlist.removeChild(addcard)
     boardlist.appendChild(addcard)
@@ -214,4 +227,9 @@ function deleteBoardList () {
   document.querySelector("#add-boardlist").removeChild(document.querySelector(".cancel"));
   addboardlist.style.height = "20px"
   addboardlist.onclick = setText;
+}
+
+window.onerror = function () {
+  console.clear()
+  return true;
 }
