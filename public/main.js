@@ -241,7 +241,7 @@ window.onchange = function () {
   localStorage.setItem("title", title)
 }
 
-// window.onerror = function () {
-//   console.clear()
-//   return true;
-// }
+window.onerror = function () {
+  console.clear()
+  return true;
+}
