@@ -229,7 +229,19 @@ function deleteBoardList () {
   addboardlist.onclick = setText;
 }
 
-window.onerror = function () {
-  console.clear()
-  return true;
+window.onchange = function () {
+  let lists = []
+  for (let i = 1; i < document.getElementsByClassName("board-lists")[0].childNodes.length; i++) {
+    lists.push(document.getElementById("boardListID"+i));
+  }
+  let title = []
+  for (let u = 0; u < lists.length; u++) {
+    title.push(lists[u].childNodes[0].innerText);
+  }
+  localStorage.setItem("title", title)
 }
+
+// window.onerror = function () {
+//   console.clear()
+//   return true;
+// }
