@@ -52,6 +52,7 @@ function createBoardLists() {
 }
 boardLists.appendChild(addboardlist);
 
+let elements = []
 let target = "";
 let id = 0;
 let cardID = 0;
@@ -119,6 +120,32 @@ function addBoardLists (value) {
     card.className = "card";
     card.id = "cardID"+cardID
     card.draggable = true;
+    card.onclick = cardClick;
+    function cardClick() {
+      card.removeChild(text)
+      let input = document.createElement("input");
+      input.id = "inputField"
+      card.appendChild(input)
+      card.onkeydown = () => {
+        if (event.keyCode == 13) {
+          let text = document.createTextNode(input.value)
+          card.removeChild(input)
+          card.appendChild(text)
+          card.onclick = cardClick
+        }
+      }
+      input.addEventListener('blur', () => {
+        if(input.value === null || input.value === ""){
+          card.removeChild(input)
+          card.onclick = cardClick
+        }else {
+          let text = document.createTextNode(input.value)
+          card.removeChild(input)
+          card.appendChild(text)
+          card.onclick = cardClick
+        }
+      })
+    }
 
     document.querySelector("#addElement").remove()
     
@@ -209,7 +236,6 @@ function addBoardLists (value) {
   }
   boardlist.appendChild(listtitle);
   boardlist.appendChild(addcard);
-  boardlist.appendChild(addElementDiv)
   boardLists.insertBefore(boardlist, document.querySelector("#add-boardlist"))
   makeTitle(value)
 }
@@ -229,7 +255,7 @@ function deleteBoardList () {
   addboardlist.onclick = setText;
 }
 
-window.onerror = function () {
-  console.clear()
-  return true;
-}
+// window.onerror = function () {
+//   console.clear()
+//   return true;
+// }

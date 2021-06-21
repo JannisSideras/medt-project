@@ -49,7 +49,7 @@ function addBoard(title) {
     id++;
 
     let a = document.createElement("a")
-    a.href = "./index.html"
+    a.href = "./ToDo.html"
 
     let board = document.createElement("div")
     board.className = "board"
